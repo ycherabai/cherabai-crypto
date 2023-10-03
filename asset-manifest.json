@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/cherabai-crypto/static/css/main.e343b176.css",
+    "main.js": "/cherabai-crypto/static/js/main.d768953d.js",
+    "index.html": "/cherabai-crypto/index.html",
+    "main.e343b176.css.map": "/cherabai-crypto/static/css/main.e343b176.css.map",
+    "main.d768953d.js.map": "/cherabai-crypto/static/js/main.d768953d.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e343b176.css",
+    "static/js/main.d768953d.js"
+  ]
+}
