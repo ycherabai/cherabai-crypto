@@ -1,6 +1,7 @@
 {
   "name": "cherabai-crypto",
   "version": "0.1.0",
+  "homepage": "http://ycherabai.github.io/cherabai-crypto",
   "private": true,
   "dependencies": {
     "axios": "^1.5.1",
