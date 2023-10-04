@@ -54,7 +54,6 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Header1</h1>
       <CryptoCurrentRate title="BTC" current={btcCurrent} />
       <CryptoCurrentRate title="ETH" current={ethCurrent} />
       <CryptoCurrentRate title="TON" current={tonCurrent} />
