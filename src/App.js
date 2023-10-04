@@ -50,6 +50,14 @@ function App() {
     };
 
     fetchAllData();
+
+    const intervalId = setInterval(() => {
+      fetchAllData();
+    }, 1000 * 1000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
   }, []);
 
   return (
