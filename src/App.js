@@ -4,8 +4,6 @@ import axios from 'axios';
 import CryptoChart from './Components/CryptoChart';
 import CryptoCurrentRate from './Components/CryptoCurrentRate';
 
-const tg = window.Telegram.WebApp;
-
 const fetchData = async (currencyId) => {
   const result = await axios(
     `https://api.coingecko.com/api/v3/coins/${currencyId}/market_chart`,
