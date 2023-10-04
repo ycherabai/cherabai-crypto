@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/cherabai-crypto/static/css/main.e343b176.css",
-    "main.js": "/cherabai-crypto/static/js/main.62ff08aa.js",
+    "main.js": "/cherabai-crypto/static/js/main.4d809fd7.js",
     "index.html": "/cherabai-crypto/index.html",
     "main.e343b176.css.map": "/cherabai-crypto/static/css/main.e343b176.css.map",
-    "main.62ff08aa.js.map": "/cherabai-crypto/static/js/main.62ff08aa.js.map"
+    "main.4d809fd7.js.map": "/cherabai-crypto/static/js/main.4d809fd7.js.map"
   },
   "entrypoints": [
     "static/css/main.e343b176.css",
-    "static/js/main.62ff08aa.js"
+    "static/js/main.4d809fd7.js"
   ]
 }
