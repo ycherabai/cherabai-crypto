@@ -4,10 +4,12 @@ import './CryptoChart.styles.css';
 import {useEffect, useMemo, useState} from "react";
 import Tooltip from "./Tooltip";
 
-const setDefaultTooltipData = (data, setTooltipData) => {
+const setDefaultTooltipData = (name, data, setTooltipData) => {
   if (data.length > 0) {
     const lastPoint = data[data.length - 1];
     setTooltipData({
+      name: name,
+      timestamp: lastPoint[0],
       price: lastPoint[1]
     });
   }
@@ -17,17 +19,19 @@ const CryptoChart = (props) => {
   const [tooltipData, setTooltipData] = useState({})
 
   useEffect(() => {
-    setDefaultTooltipData(props.data, setTooltipData)
-  }, [props.data]);
+    setDefaultTooltipData(props.coinName, props.data, setTooltipData)
+  }, [props.data, props.coinName]);
 
   const chartOptions = {
     chart: {
       type: 'line',
       zoomType: 'x',
-      backgroundColor: '#151c29'
+      backgroundColor: '#151c29',
+      height: '70%',
+      marginTop: 11
     },
     title: {
-      text: props.title,
+      text: '',
       style: {
         color: 'rgb(207, 207, 207)',
       },
@@ -52,16 +56,14 @@ const CryptoChart = (props) => {
         point: {
           events: {
             mouseOver: function() {
-              const tooltipText = `
-              Series: ${this.series.name} <br>
-              X: ${this.x}, Y: ${this.y}
-            `;
               setTooltipData({
+                name: this.series.name,
+                timestamp: this.x,
                 price: this.y
               })
             },
             mouseOut: function() {
-              setDefaultTooltipData(props.data, setTooltipData)
+              setDefaultTooltipData(props.coinName, props.data, setTooltipData)
             }
           }
         },
@@ -176,9 +178,17 @@ const CryptoChart = (props) => {
     },
     series: [
       {
+        type: 'area',
         name: props.coinName,
         data: props.data,
         color: '#45AEF5',
+        fillColor: {
+          linearGradient: [0, 0, 0, 180],
+          stops: [
+            [0, Highcharts.color('#45AEF5').setOpacity(0.5).get('rgba')],
+            [1, Highcharts.color('#151c29').setOpacity(0).get('rgba')]
+          ]
+        },
         lineWidth: 1.5,
         states: {
           hover: {

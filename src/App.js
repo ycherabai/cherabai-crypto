@@ -15,7 +15,7 @@ const fetchData = async (currencyId) => {
     }
   );
   return result.data.prices.map((item) => [
-    item[0] + 7200 * 1000, // add 2 hours(in ms) to have UTC+2 time
+    item[0],
     parseFloat(item[1].toFixed(2)), // price in 2 digit after coma format
   ]);
 };
@@ -65,6 +65,7 @@ function App() {
       <CryptoCurrentRate title="BTC" current={btcCurrent} />
       <CryptoCurrentRate title="ETH" current={ethCurrent} />
       <CryptoCurrentRate title="TON" current={tonCurrent} />
+      <br/>
       <CryptoChart data={btcData} title="Bitcoin" coinName="BTC" />
       <CryptoChart data={ethData} title="Ethereum" coinName="ETH" />
       <CryptoChart data={tonData} title="TON" coinName="TON" />
