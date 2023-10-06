@@ -55,9 +55,6 @@ const Tooltip = ({currentRangeData,   data}) => {
             ${pnlData.pnl}
           </div>
         </div>
-        // <p style={{marginBottom: '0.5rem', marginTop: '0.5rem', color: `${pnlData.isPositive ? 'green' : 'red'}`}}>
-        //   {pnlData.pnlPercent} ${pnlData.pnl}
-        // </p>
       }
       <p style={{marginBottom: '1rem', marginTop: '0.5rem'}}>{date}</p>
     </div>

@@ -1,47 +1,32 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-import axios from 'axios';
-import CryptoChart from './Components/CryptoChart';
-
-const fetchData = async (currencyId) => {
-  const result = await axios(
-    `https://api.coingecko.com/api/v3/coins/${currencyId}/market_chart`,
-    {
-      params: {
-        vs_currency: 'usd',
-        days: '1',
-      },
-    }
-  );
-  return result.data.prices.map((item) => [
-    item[0],
-    parseFloat(item[1].toFixed(2)), // price in 2 digit after coma format
-  ]);
-};
-
-const calculateCurrent = (data) => {
-  const current = data[data.length - 1][1];
-  const pnl = (current / data[0][1]) * 100 - 100;
-  return { current: current, pnl: parseFloat(pnl.toFixed(2)) };
-};
+import CurrencyRateChart from './Components/CurrencyRateChart';
+import fetchCurrencyRate from "./api/coingecko-api";
 
 function App() {
-  const [btcData, setBtcData] = useState([]);
-  const [ethData, setEthData] = useState([]);
-  const [tonData, setTonData] = useState([]);
+  const [currencyRates, setCurrencyRates] = useState({
+    btcRate: [],
+    ethRate: [],
+    tonRate: []
+  })
 
   useEffect(() => {
-    const fetchAllData = async () => {
-      setBtcData(await fetchData('bitcoin'));
-      setEthData(await fetchData('ethereum'));
-      setTonData(await fetchData('the-open-network'));
+    const fetchCurrencyRates = async () => {
+      const btcRate = await fetchCurrencyRate('bitcoin');
+      const ethRate = await fetchCurrencyRate('ethereum');
+      const tonRate = await fetchCurrencyRate('the-open-network');
+      setCurrencyRates({
+        btcRate: btcRate,
+        ethRate: ethRate,
+        tonRate: tonRate
+      })
     };
 
-    fetchAllData();
+    fetchCurrencyRates();
 
     const intervalId = setInterval(() => {
-      fetchAllData();
-    }, 180 * 1000);
+      fetchCurrencyRates();
+    }, 180 * 1000); // update every 3 min
 
     return () => {
       clearInterval(intervalId);
@@ -51,11 +36,11 @@ function App() {
   return (
     <div className="App">
       <br/>
-      <CryptoChart data={btcData} title="Bitcoin" coinName="BTC" />
+      <CurrencyRateChart rate={currencyRates.btcRate} coinName="BTC" />
       <br/>
-      <CryptoChart data={ethData} title="Ethereum" coinName="ETH" />
+      <CurrencyRateChart rate={currencyRates.ethRate} coinName="ETH" />
       <br/>
-      <CryptoChart data={tonData} title="TON" coinName="TON" />
+      <CurrencyRateChart rate={currencyRates.tonRate} coinName="TON" />
       <br/>
     </div>
   );

@@ -1,8 +1,9 @@
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
-import './CryptoChart.styles.css';
 import {useEffect, useMemo, useState} from "react";
 import Tooltip from "./Tooltip";
+
+import './CurrencyRateChart.styles.css';
 
 const setDefaultTooltipData = (name, data, setTooltipData) => {
   if (data.length > 0) {
@@ -16,7 +17,7 @@ const setDefaultTooltipData = (name, data, setTooltipData) => {
 }
 
 
-const CryptoChart = (props) => {
+const CurrencyRateChart = ({rate, coinName}) => {
   const [tooltipData, setTooltipData] = useState({})
   const [currentRangeData, setCurrentRangeData] = useState([])
 
@@ -24,12 +25,12 @@ const CryptoChart = (props) => {
     const xAxis = chart.xAxis[0];
     const { min, max } = xAxis.getExtremes();
 
-    setCurrentRangeData(props.data.filter(data => data[0] >= min && data[0] <= max))
+    setCurrentRangeData(rate.filter(data => data[0] >= min && data[0] <= max))
   };
 
   useEffect(() => {
-    setDefaultTooltipData(props.coinName, props.data, setTooltipData)
-  }, [props.data, props.coinName]);
+    setDefaultTooltipData(coinName, rate, setTooltipData)
+  }, [rate, coinName]);
 
   const chartOptions = {
     chart: {
@@ -66,7 +67,7 @@ const CryptoChart = (props) => {
         setExtremes: function(e) {
           const min = e.min;
           const max = e.max;
-          setCurrentRangeData(props.data.filter(data => data[0] >= min && data[0] <= max))
+          setCurrentRangeData(rate.filter(data => data[0] >= min && data[0] <= max))
         }
       }
     },
@@ -82,7 +83,7 @@ const CryptoChart = (props) => {
               })
             },
             mouseOut: function() {
-              setDefaultTooltipData(props.coinName, props.data, setTooltipData)
+              setDefaultTooltipData(coinName, rate, setTooltipData)
             }
           }
         },
@@ -199,8 +200,8 @@ const CryptoChart = (props) => {
     series: [
       {
         type: 'area',
-        name: props.coinName,
-        data: props.data,
+        name: coinName,
+        data: rate,
         color: '#5bb8f6',
         fillColor: {
           linearGradient: [0, 0, 0, 180],
@@ -231,16 +232,16 @@ const CryptoChart = (props) => {
         initCurrentRangeData(chart);
       }}
     />
-  }, [props.data]);
+  }, [rate]);
 
   return (
     <>
       <Tooltip currentRangeData={currentRangeData} data={tooltipData}/>
-      {props.data.length> 0 && (
+      {rate.length> 0 && (
         memorizedChart
       )}
     </>
   );
 };
 
-export default CryptoChart;
+export default CurrencyRateChart;
