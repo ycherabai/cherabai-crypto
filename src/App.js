@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import './App.css';
 import axios from 'axios';
 import CryptoChart from './Components/CryptoChart';
-import CryptoCurrentRate from './Components/CryptoCurrentRate';
 
 const fetchData = async (currencyId) => {
   const result = await axios(
@@ -30,30 +29,19 @@ function App() {
   const [btcData, setBtcData] = useState([]);
   const [ethData, setEthData] = useState([]);
   const [tonData, setTonData] = useState([]);
-  const [btcCurrent, setBtcCurrent] = useState({});
-  const [ethCurrent, setEthCurrent] = useState({});
-  const [tonCurrent, setTonCurrent] = useState({});
 
   useEffect(() => {
     const fetchAllData = async () => {
-      const btcDataRes = await fetchData('bitcoin');
-      setBtcData(btcDataRes);
-      setBtcCurrent(calculateCurrent(btcDataRes));
-
-      const ethDataRes = await fetchData('ethereum');
-      setEthData(ethDataRes);
-      setEthCurrent(calculateCurrent(ethDataRes));
-
-      const tonDataRes = await fetchData('the-open-network');
-      setTonData(tonDataRes);
-      setTonCurrent(calculateCurrent(tonDataRes));
+      setBtcData(await fetchData('bitcoin'));
+      setEthData(await fetchData('ethereum'));
+      setTonData(await fetchData('the-open-network'));
     };
 
     fetchAllData();
 
     const intervalId = setInterval(() => {
       fetchAllData();
-    }, 1000 * 1000);
+    }, 180 * 1000);
 
     return () => {
       clearInterval(intervalId);
@@ -62,13 +50,13 @@ function App() {
 
   return (
     <div className="App">
-      <CryptoCurrentRate title="BTC" current={btcCurrent} />
-      <CryptoCurrentRate title="ETH" current={ethCurrent} />
-      <CryptoCurrentRate title="TON" current={tonCurrent} />
       <br/>
       <CryptoChart data={btcData} title="Bitcoin" coinName="BTC" />
+      <br/>
       <CryptoChart data={ethData} title="Ethereum" coinName="ETH" />
+      <br/>
       <CryptoChart data={tonData} title="TON" coinName="TON" />
+      <br/>
     </div>
   );
 }

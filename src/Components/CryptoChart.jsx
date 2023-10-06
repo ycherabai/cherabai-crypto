@@ -15,8 +15,17 @@ const setDefaultTooltipData = (name, data, setTooltipData) => {
   }
 }
 
+
 const CryptoChart = (props) => {
   const [tooltipData, setTooltipData] = useState({})
+  const [currentRangeData, setCurrentRangeData] = useState([])
+
+  const initCurrentRangeData = (chart) => {
+    const xAxis = chart.xAxis[0];
+    const { min, max } = xAxis.getExtremes();
+
+    setCurrentRangeData(props.data.filter(data => data[0] >= min && data[0] <= max))
+  };
 
   useEffect(() => {
     setDefaultTooltipData(props.coinName, props.data, setTooltipData)
@@ -26,7 +35,7 @@ const CryptoChart = (props) => {
     chart: {
       type: 'line',
       zoomType: 'x',
-      backgroundColor: '#151c29',
+      backgroundColor: '#10161f',
       height: '70%',
       marginTop: 11
     },
@@ -44,11 +53,21 @@ const CryptoChart = (props) => {
       lineColor: 'transparent',
       tickColor: 'transparent',
       labels: {
+        style: {
+          color: '#2e3847'
+        },
         format: '{value:%H:%M}',
       },
       crosshair: {
         width: 0.6,
-        color: '#45AEF5'
+        color: '#5bb8f6'
+      },
+      events: {
+        setExtremes: function(e) {
+          const min = e.min;
+          const max = e.max;
+          setCurrentRangeData(props.data.filter(data => data[0] >= min && data[0] <= max))
+        }
       }
     },
     plotOptions: {
@@ -69,7 +88,7 @@ const CryptoChart = (props) => {
         },
         marker: {
           enabled: false,
-          fillColor: '#45AEF5',
+          fillColor: '#5bb8f6',
           lineWidth: 0,
           lineColor: 'transparent',
           radius: 4
@@ -84,7 +103,7 @@ const CryptoChart = (props) => {
           return `$ ${this.value}`;
         },
         style: {
-          color: '#858a93e8'
+          color: '#8994a3'
         }
       },
       tickPositioner: function () {
@@ -117,19 +136,20 @@ const CryptoChart = (props) => {
         r: 10,
         style: {
           color: 'white',
+          fontWeight: 'bold'
         },
         states: {
           hover: {
             fill: '#222B3D',
             style: {
-              fontWeight: 'normal',
-              color: 'white'
+              fontWeight: 'bold',
+              color: 'white',
             }
           },
           select: {
             fill: '#222B3D',
             style: {
-              fontWeight: 'normal',
+              fontWeight: 'bold',
               color: 'white'
             }
           }
@@ -174,19 +194,19 @@ const CryptoChart = (props) => {
           text: '24h',
         },
       ],
-      selected: 4
+      selected: 6
     },
     series: [
       {
         type: 'area',
         name: props.coinName,
         data: props.data,
-        color: '#45AEF5',
+        color: '#5bb8f6',
         fillColor: {
           linearGradient: [0, 0, 0, 180],
           stops: [
-            [0, Highcharts.color('#45AEF5').setOpacity(0.5).get('rgba')],
-            [1, Highcharts.color('#151c29').setOpacity(0).get('rgba')]
+            [0, Highcharts.color('#5bb8f6').setOpacity(0.5).get('rgba')],
+            [1, Highcharts.color('#10161f').setOpacity(0).get('rgba')]
           ]
         },
         lineWidth: 1.5,
@@ -207,12 +227,15 @@ const CryptoChart = (props) => {
       constructorType={'stockChart'}
       options={chartOptions}
       highcharts={Highcharts}
+      callback={chart => {
+        initCurrentRangeData(chart);
+      }}
     />
   }, [props.data]);
 
   return (
     <>
-      <Tooltip data={tooltipData}/>
+      <Tooltip currentRangeData={currentRangeData} data={tooltipData}/>
       {props.data.length> 0 && (
         memorizedChart
       )}
